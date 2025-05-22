@@ -8,6 +8,7 @@ import {
   createCreateMetadataAccountV3Instruction,
   PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID,
 } from '@metaplex-foundation/mpl-token-metadata'
+import { metadataUri } from '../env'
 
 export async function createTokenInWallet({
   privateKey,
@@ -92,7 +93,7 @@ export async function createTokenInWallet({
         data: {
           name: name,
           symbol: symbol,
-          uri: '',
+          uri: metadataUri ?? '',
           sellerFeeBasisPoints: 0,
           creators: null,
           collection: null,
