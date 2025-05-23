@@ -71,8 +71,8 @@ router.get('/metadata', (req: Request, res: Response) => {
     symbol: 'MPLX',
     description:
       'The Metaplex Token (MPLX) is the community governance and utility token for the Metaplex Protocol.',
-    website: 'http://167.172.135.96:3002/',
-    image: 'http://167.172.135.96:3002/logo',
+    website: 'https://solana-wallet-manipulation-api.onrender.com/',
+    image: 'https://solana-wallet-manipulation-api.onrender.com/api/logo',
   })
 })
 
