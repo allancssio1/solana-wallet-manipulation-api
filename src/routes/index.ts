@@ -7,13 +7,32 @@ import { transferTokens } from '../service/transfer-token'
 // Configurar o roteador
 export const router = express.Router()
 
-const toWallet = 'Hz6cCyZeuTTbsQ6RXQDEkiWRTMbk7fiPMMABY7ihpaNa'
-const tokenMint = 'FMSc3GS1XiYiZMh3tmUmaAHhYNoGX6ApM5Yhxa6d9vrG'
+interface CreateTokenRequest extends Request {
+  body: {
+    name: string
+    symbol: string
+    quantity: number
+  }
+}
+
+interface TransferTokenRequest extends Request {
+  body: {
+    toWallet: string
+    tokenMint: string
+    quantity: number
+  }
+}
 
 // Rota para realizar a transferência de tokens
-router.post('/transfer', async (req: Request, res: Response) => {
+router.post('/transfer', async (req: TransferTokenRequest, res: Response) => {
   try {
-    const result = await transferTokens(privateKey, toWallet, tokenMint, 1)
+    const { toWallet, tokenMint, quantity } = req.body
+    const result = await transferTokens(
+      privateKey,
+      toWallet,
+      tokenMint,
+      quantity,
+    )
     res.status(200).json(result)
   } catch (error) {
     res.status(400).json({
@@ -24,13 +43,14 @@ router.post('/transfer', async (req: Request, res: Response) => {
 })
 
 // Rota para gerar uma nova API Key
-router.post('/create-token', (req: Request, res: Response) => {
+router.post('/create-token', (req: CreateTokenRequest, res: Response) => {
   try {
+    const { name, quantity, symbol } = req.body
     const mint = createTokenInWallet({
       privateKey: privateKey,
-      quantity: 60,
-      name: 'Token_001',
-      symbol: 'BCS',
+      quantity,
+      name,
+      symbol,
     })
     res.status(201).json({
       success: true,
