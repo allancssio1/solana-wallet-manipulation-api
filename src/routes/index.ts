@@ -75,3 +75,7 @@ router.get('/metadata', (req: Request, res: Response) => {
     image: 'http://167.172.135.96:3002/logo',
   })
 })
+
+router.get('/logo', (req: Request, res: Response) => {
+  res.sendFile('logo.png', { root: `./public/` })
+})
