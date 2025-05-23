@@ -67,10 +67,10 @@ router.post('/create-token', (req: CreateTokenRequest, res: Response) => {
 
 router.get('/metadata', (req: Request, res: Response) => {
   res.json({
-    name: 'Metaplex Token',
-    symbol: 'MPLX',
+    name: 'Imovel chain BCS',
+    symbol: 'ICBCS',
     description:
-      'The Metaplex Token (MPLX) is the community governance and utility token for the Metaplex Protocol.',
+      'The Imovel chain BCS (ICBCS) is the community governance and utility token for the Metaplex Protocol.',
     website: 'https://solana-wallet-manipulation-api.onrender.com/',
     image: 'https://solana-wallet-manipulation-api.onrender.com/api/logo',
   })
