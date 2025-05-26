@@ -67,7 +67,7 @@ router.post('/create-token', (req: CreateTokenRequest, res: Response) => {
 
 router.get('/metadata', (req: Request, res: Response) => {
   res.json({
-    name: 'Imovel chain BCS',
+    name: 'Imovel chain BCS 1',
     symbol: 'ICBCS',
     description:
       'The Imovel chain BCS (ICBCS) is the community governance and utility token for the Metaplex Protocol.',
