@@ -172,6 +172,7 @@ export async function createTokenInWallet({
   if (quantity <= 0) {
     throw new Error('Quantidade deve ser maior que zero')
   }
+  console.log('1')
 
   // Validar metadataUri
   await validateMetadataUri(metadataUri, name, symbol)
@@ -181,6 +182,7 @@ export async function createTokenInWallet({
     clusterApiUrl('devnet'),
     'confirmed',
   )
+  console.log('2')
 
   // Criar keypair a partir da chave privada
   const walletKeypair: Keypair = Keypair.fromSecretKey(privateKey)
@@ -197,6 +199,7 @@ export async function createTokenInWallet({
       } SOL, disponível ${balance / 1_000_000_000} SOL`,
     )
   }
+  console.log('3')
 
   try {
     // Criar mint
@@ -215,6 +218,7 @@ export async function createTokenInWallet({
       mint,
       walletKeypair.publicKey,
     )
+    console.log('4')
 
     // Mintar tokens
     const initialAmount: number = Math.floor(quantity * 1_000_000)
@@ -226,6 +230,7 @@ export async function createTokenInWallet({
       walletKeypair.publicKey,
       initialAmount,
     )
+    console.log('5')
 
     // Preparar metadados
     const metadata: TokenMetadata = {
@@ -252,6 +257,7 @@ export async function createTokenInWallet({
       TOKEN_METADATA_PROGRAM_ID,
     )[0]
 
+    console.log('7')
     const metadataInstruction = createCreateMetadataAccountV3Instruction(
       {
         metadata: metadataPDA,
@@ -277,6 +283,7 @@ export async function createTokenInWallet({
       },
     )
 
+    console.log('8')
     // Criar e assinar uma VersionedTransaction
     const transaction = new Transaction().add(metadataInstruction)
     const recentBlockhash = await connection.getLatestBlockhash('confirmed')
@@ -287,6 +294,7 @@ export async function createTokenInWallet({
     const versionedTransaction = VersionedTransaction.deserialize(
       transaction.serialize(),
     )
+    console.log('9')
     versionedTransaction.sign([walletKeypair])
 
     // Enviar transação
@@ -294,6 +302,7 @@ export async function createTokenInWallet({
       skipPreflight: false,
       preflightCommitment: 'confirmed',
     })
+    console.log('10')
     await connection.confirmTransaction(signature, 'confirmed')
 
     // Submeter ao Solflare Aggregator
@@ -301,6 +310,7 @@ export async function createTokenInWallet({
       mint: mint.toBase58(),
       ...metadata,
     }
+    console.log('11')
     const pullRequestUrl: string | undefined = await submitToSolflareAggregator(
       aggregatorData,
     )
