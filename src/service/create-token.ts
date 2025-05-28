@@ -17,6 +17,7 @@ import {
 } from '@metaplex-foundation/mpl-token-metadata'
 import { Octokit } from '@octokit/rest'
 import { githubToken } from '../env'
+import axios from 'axios'
 
 // Interface para os parâmetros da função
 interface CreateTokenParams {
