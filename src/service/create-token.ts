@@ -112,7 +112,7 @@ async function submitToSolflareAggregator(
     const mainBranch = await octokit.repos.getBranch({
       owner: repoOwner,
       repo: repoName,
-      branch: 'main',
+      branch: 'master',
     })
 
     // Criar um novo branch
@@ -142,7 +142,7 @@ async function submitToSolflareAggregator(
       repo: repoName,
       title: `Add token: ${tokenData.name}`,
       head: branchName,
-      base: 'main',
+      base: 'master',
       body: `Adicionando token ${tokenData.name} (${tokenData.mint}) à lista.`,
     })
 
