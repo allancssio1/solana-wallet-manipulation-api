@@ -299,7 +299,10 @@ export async function createTokenInWallet({
     // Converter Transaction para VersionedTransaction
     console.log('8.3')
     const versionedTransaction = VersionedTransaction.deserialize(
-      transaction.serialize(),
+      transaction.serialize({
+        verifySignatures: false,
+        requireAllSignatures: false,
+      }),
     )
     console.log('9')
     versionedTransaction.sign([walletKeypair])
