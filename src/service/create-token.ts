@@ -323,6 +323,7 @@ export async function createTokenInWallet({
       pullRequestUrl,
     }
   } catch (error: unknown) {
+    console.log('erro', error)
     throw new Error(`Erro ao criar token: ${error}`)
   }
 }
