@@ -290,11 +290,14 @@ export async function createTokenInWallet({
     console.log('8')
     // Criar e assinar uma VersionedTransaction
     const transaction = new Transaction().add(metadataInstruction)
+    console.log('8.1')
     const recentBlockhash = await connection.getLatestBlockhash('confirmed')
+    console.log('8.2')
     transaction.recentBlockhash = recentBlockhash.blockhash
     transaction.feePayer = walletKeypair.publicKey
 
     // Converter Transaction para VersionedTransaction
+    console.log('8.3')
     const versionedTransaction = VersionedTransaction.deserialize(
       transaction.serialize(),
     )
