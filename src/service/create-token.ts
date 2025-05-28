@@ -71,6 +71,8 @@ async function validateMetadataUri(
       symbol?: string
       image?: string
     }>(uri)
+
+    console.log('🚀 ~ response:', response.data)
     const metadata: { name?: string; symbol?: string; image?: string } =
       response.data
 
@@ -83,6 +85,7 @@ async function validateMetadataUri(
       )
     }
   } catch (error: unknown) {
+    console.log('🚀 ~ error:', error)
     throw new Error(`Erro ao validar metadataUri (${uri}): ${error}`)
   }
 }
