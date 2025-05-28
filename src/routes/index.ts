@@ -47,7 +47,7 @@ router.post('/create-token', (req: CreateTokenRequest, res: Response) => {
   try {
     const { name, quantity, symbol } = req.body
     const mint = createTokenInWallet({
-      privateKey: privateKey,
+      privateKey: new Uint8Array(privateKey),
       quantity,
       name,
       symbol,
