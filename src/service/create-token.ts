@@ -317,8 +317,8 @@ export async function createTokenInWallet({
 
     // Submeter ao Solflare Aggregator
     const aggregatorData: AggregatorData = {
-      mint: mint.toBase58(),
       ...metadata,
+      mint: mint.toBase58(),
     }
     console.log('11')
     const pullRequestUrl: string | undefined = await submitToSolflareAggregator(
