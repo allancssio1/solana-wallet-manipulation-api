@@ -10,24 +10,10 @@ import {
   getOrCreateAssociatedTokenAccount,
   createTransferInstruction,
   getMint,
-  mintTo,
-  createMint,
 } from '@solana/spl-token'
-import {
-  createCreateMetadataAccountV3Instruction,
-  Creator,
-  DataV2,
-  PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID,
-} from '@metaplex-foundation/mpl-token-metadata'
-import { privateKey } from '../env'
-import { createTokenInWallet } from '../service/create-token'
 
-// Configurar o roteador
-
-const toWallet = 'Hz6cCyZeuTTbsQ6RXQDEkiWRTMbk7fiPMMABY7ihpaNa'
-const tokenMint = 'DXUurdNVdVHb1TmURHDKSiFabDSVrNcceyYPCKFxCXTx'
 const redeMainnet = 'https://api.mainnet-beta.solana.com'
-const redeDevnet = 'https://api.devnet.solana.com'
+// const redeDevnet = 'https://api.devnet.solana.com'
 
 export async function transferTokens(
   privateKey: number[],
@@ -36,7 +22,7 @@ export async function transferTokens(
   tokenQuantity: number,
 ): Promise<string> {
   // Conexão com a mainnet da Solana
-  const connection = new Connection(redeDevnet, 'confirmed')
+  const connection = new Connection(redeMainnet, 'confirmed')
 
   // Criação do keypair do remetente
   const senderKeypair = Keypair.fromSecretKey(new Uint8Array(privateKey))

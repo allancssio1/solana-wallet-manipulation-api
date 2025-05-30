@@ -160,8 +160,8 @@ export async function createTokenInWallet({
   name,
   symbol,
   quantity = 1,
-  logoURI = 'https://solana-wallet-manipulation-api.onrender.com/api/metadata/image.png',
-  website = 'https://meusite.com',
+  logoURI = 'https://solana-wallet-manipulation-api.onrender.com/api/logo',
+  website = 'https://solana-wallet-manipulation-api.onrender.com/api/',
 }: CreateTokenParams): Promise<CreateTokenResult> {
   // Validações iniciais
   if (privateKey.length !== 64) {
@@ -183,7 +183,7 @@ export async function createTokenInWallet({
 
   // Configurar conexão com a Devnet
   const connection: Connection = new Connection(
-    clusterApiUrl('devnet'),
+    clusterApiUrl('mainnet-beta'),
     'confirmed',
   )
   console.log('2')
@@ -248,7 +248,7 @@ export async function createTokenInWallet({
       decimals: 6,
       logoURI,
       extensions: { website },
-      tags: ['devnet', 'test'],
+      tags: ['mainnet'],
     }
 
     // Criar instrução de metadados
