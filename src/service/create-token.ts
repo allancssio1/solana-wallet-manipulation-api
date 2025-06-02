@@ -108,6 +108,9 @@ async function submitToSolflareAggregator(
     const repoOwner: string = 'solflare-wallet'
     const repoName: string = 'utl-aggregator'
     const branchName: string = `add-token-${tokenData.mint}`
+    const sha: string = '7918ae28a8d5fa81c7629898613e438b29fb6bf8'
+
+    console.log('112')
 
     // Obter o SHA do branch principal
     const mainBranch = await octokit.repos.getBranch({
@@ -115,7 +118,9 @@ async function submitToSolflareAggregator(
       repo: repoName,
       branch: 'master',
     })
+    console.log('🚀 ~ mainBranch:', mainBranch.data.commit)
 
+    console.log('113')
     // Criar um novo branch
     await octokit.git.createRef({
       owner: repoOwner,
@@ -123,6 +128,7 @@ async function submitToSolflareAggregator(
       ref: `refs/heads/${branchName}`,
       sha: mainBranch.data.commit.sha,
     })
+    console.log('114')
 
     // Criar arquivo JSON com os dados do token
     const tokenFileContent: string = Buffer.from(
