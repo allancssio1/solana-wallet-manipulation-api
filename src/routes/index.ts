@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 
 import { privateKey } from '../env'
-import { createTokenInWallet } from '../service/create-token'
+import { createTokenInWallet, testandoDB } from '../service/create-token'
 import { transferTokens } from '../service/transfer-token'
 
 // Configurar o roteador
@@ -78,4 +78,9 @@ router.get('/metadata', (req: Request, res: Response) => {
 
 router.get('/logo', (req: Request, res: Response) => {
   res.sendFile('logo.png', { root: `./public/` })
+})
+
+router.get('/teste', (req: Request, res: Response) => {
+  const result = testandoDB()
+  res.json(result)
 })

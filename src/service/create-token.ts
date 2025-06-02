@@ -18,6 +18,7 @@ import {
 import { Octokit } from '@octokit/rest'
 import { githubToken } from '../env'
 import axios from 'axios'
+import { prisma } from '../models/prisma'
 
 // Interface para os parâmetros da função
 interface CreateTokenParams {
@@ -179,7 +180,7 @@ export async function createTokenInWallet({
   console.log('1')
 
   // Validar metadataUri
-  await validateMetadataUri(metadataUri, name, symbol)
+  // await validateMetadataUri(metadataUri, name, symbol)
 
   // Configurar conexão com a Devnet
   const connection: Connection = new Connection(
@@ -192,17 +193,20 @@ export async function createTokenInWallet({
   const walletKeypair: Keypair = Keypair.fromSecretKey(privateKey)
 
   // Verificar saldo mínimo
-  const balance: number = await connection.getBalance(walletKeypair.publicKey)
-  const minBalance: number = await connection.getMinimumBalanceForRentExemption(
-    165,
-  ) // Tamanho aproximado para mint + metadados
-  if (balance < minBalance) {
-    throw new Error(
-      `Saldo de SOL insuficiente: necessário ~${
-        minBalance / 1_000_000_000
-      } SOL, disponível ${balance / 1_000_000_000} SOL`,
-    )
-  }
+  // const balance: number = await connection.getBalance(walletKeypair.publicKey)
+  // const minBalance: number = await connection.getMinimumBalanceForRentExemption(
+  //   165,
+  // )
+  // Tamanho aproximado para mint + metadados
+  // console.log('🚀 ~ balance:', balance)
+  // if (balance < minBalance) {
+  //   console.log('🚀 ~ balance < minBalance:', balance < minBalance)
+  //   throw new Error(
+  //     `Saldo de SOL insuficiente: necessário ~${
+  //       minBalance / 1_000_000_000
+  //     } SOL, disponível ${balance / 1_000_000_000} SOL`,
+  //   )
+  // }
   console.log('3')
 
   try {
@@ -441,3 +445,18 @@ export async function createTokenInWallet({
 
 //   return mint.toBase58()
 // }
+
+export async function testandoDB() {
+  try {
+    return await prisma.token.create({
+      data: {
+        name: 'token_1',
+        amount: 60,
+        description: 'token description',
+        symble: 'TKN1',
+      },
+    })
+  } catch (error) {
+    return error
+  }
+}
