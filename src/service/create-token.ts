@@ -194,6 +194,7 @@ export async function createTokenInWallet({
 
   // Verificar saldo mínimo
   const balance = await connection.getBalance(walletKeypair.publicKey)
+  console.log('🚀 ~ balance:', balance)
   console.log(`Saldo: ${balance / 1_000_000_000} SOL`)
   // Tamanho aproximado para mint + metadados
   // console.log('🚀 ~ balance:', balance)
@@ -216,6 +217,8 @@ export async function createTokenInWallet({
       null,
       6, // Casas decimais
     )
+
+    console.log('Mint criado:', mint.toBase58())
 
     // Criar ou obter conta associada
     const tokenAccount = await getOrCreateAssociatedTokenAccount(
