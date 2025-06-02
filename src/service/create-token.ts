@@ -193,10 +193,8 @@ export async function createTokenInWallet({
   const walletKeypair: Keypair = Keypair.fromSecretKey(privateKey)
 
   // Verificar saldo mínimo
-  // const balance: number = await connection.getBalance(walletKeypair.publicKey)
-  // const minBalance: number = await connection.getMinimumBalanceForRentExemption(
-  //   165,
-  // )
+  const balance = await connection.getBalance(walletKeypair.publicKey)
+  console.log(`Saldo: ${balance / 1_000_000_000} SOL`)
   // Tamanho aproximado para mint + metadados
   // console.log('🚀 ~ balance:', balance)
   // if (balance < minBalance) {
