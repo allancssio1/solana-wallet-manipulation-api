@@ -61,37 +61,6 @@ interface CreateTokenResult {
 const metadataUri =
   'https://solana-wallet-manipulation-api.onrender.com/api/metadata'
 
-// Função para validar metadados na URL fornecida
-async function validateMetadataUri(
-  uri: string,
-  expectedName: string,
-  expectedSymbol: string,
-): Promise<void> {
-  try {
-    const response = await axios.get<{
-      name?: string
-      symbol?: string
-      image?: string
-    }>(uri)
-
-    console.log('🚀 ~ response:', response.data)
-    const metadata: { name?: string; symbol?: string; image?: string } =
-      response.data
-
-    if (!metadata.name || !metadata.symbol || !metadata.image) {
-      throw new Error('Metadados incompletos: deve conter name, symbol e image')
-    }
-    if (metadata.name !== expectedName || metadata.symbol !== expectedSymbol) {
-      console.warn(
-        `Aviso: Metadados na URL (name: ${metadata.name}, symbol: ${metadata.symbol}) diferem dos fornecidos (name: ${expectedName}, symbol: ${expectedSymbol})`,
-      )
-    }
-  } catch (error: unknown) {
-    console.log('🚀 ~ error:', error)
-    throw new Error(`Erro ao validar metadataUri (${uri}): ${error}`)
-  }
-}
-
 // Função para submeter ao Solflare Unified Token List Aggregator
 async function submitToSolflareAggregator(
   tokenData: AggregatorData,
@@ -107,7 +76,7 @@ async function submitToSolflareAggregator(
     const octokit: Octokit = new Octokit({ auth: githubToken })
     const repoOwner: string = 'solflare-wallet'
     const repoName: string = 'utl-aggregator'
-    const branchName: string = `add-token-${tokenData.mint}`
+    const branchName: string = `add-token-${tokenData.mint}-${Date.now()}`
     const sha: string = '7918ae28a8d5fa81c7629898613e438b29fb6bf8'
 
     console.log('112')
@@ -185,9 +154,6 @@ export async function createTokenInWallet({
   }
   console.log('1')
 
-  // Validar metadataUri
-  // await validateMetadataUri(metadataUri, name, symbol)
-
   // Configurar conexão com a Devnet
   const connection: Connection = new Connection(
     clusterApiUrl('mainnet-beta'),
@@ -202,17 +168,6 @@ export async function createTokenInWallet({
   const balance = await connection.getBalance(walletKeypair.publicKey)
   console.log('🚀 ~ balance:', balance)
   console.log(`Saldo: ${balance / 1_000_000_000} SOL`)
-  // Tamanho aproximado para mint + metadados
-  // console.log('🚀 ~ balance:', balance)
-  // if (balance < minBalance) {
-  //   console.log('🚀 ~ balance < minBalance:', balance < minBalance)
-  //   throw new Error(
-  //     `Saldo de SOL insuficiente: necessário ~${
-  //       minBalance / 1_000_000_000
-  //     } SOL, disponível ${balance / 1_000_000_000} SOL`,
-  //   )
-  // }
-  console.log('3')
 
   try {
     // Criar mint
@@ -346,124 +301,5 @@ export async function createTokenInWallet({
   } catch (error: unknown) {
     console.log('erro', error)
     throw new Error(`Erro ao criar token: ${error}`)
-  }
-}
-
-// export async function createTokenInWallet({
-//   privateKey,
-//   name,
-//   symbol,
-//   quantity = 1,
-// }: {
-//   privateKey: number[]
-//   quantity: number
-//   name: string
-//   symbol: string
-// }): Promise<string> {
-//   if (privateKey.length !== 64)
-//     throw new Error('Chave privada inválida: deve ter 64 bytes')
-//   if (name.length > 32) throw new Error('Nome deve ter no máximo 32 caracteres')
-//   if (symbol.length > 10)
-//     throw new Error('Símbolo deve ter no máximo 10 caracteres')
-
-//   const connection = new Connection(
-//     'https://api.devnet.solana.com',
-//     'confirmed',
-//   )
-
-//   const walletKeypair = Keypair.fromSecretKey(new Uint8Array(privateKey))
-
-//   const balance = await connection.getBalance(walletKeypair.publicKey)
-//   if (balance < 0.05 * 1_000_000_000)
-//     throw new Error('Saldo de SOL insuficiente')
-
-//   const mint = await createMint(
-//     connection,
-//     walletKeypair,
-//     walletKeypair.publicKey,
-//     null,
-//     6,
-//   )
-
-//   const tokenAccount = await getOrCreateAssociatedTokenAccount(
-//     connection,
-//     walletKeypair,
-//     mint,
-//     walletKeypair.publicKey,
-//   )
-
-//   const initialAmount = Math.floor(quantity * 1_000_000)
-//   await mintTo(
-//     connection,
-//     walletKeypair,
-//     mint,
-//     tokenAccount.address,
-//     walletKeypair.publicKey,
-//     initialAmount,
-//   )
-
-//   const metadataPDA = PublicKey.findProgramAddressSync(
-//     [
-//       Buffer.from('metadata'),
-//       TOKEN_METADATA_PROGRAM_ID.toBuffer(),
-//       mint.toBuffer(),
-//     ],
-//     TOKEN_METADATA_PROGRAM_ID,
-//   )[0]
-
-//   const metadataInstruction = createCreateMetadataAccountV3Instruction(
-//     {
-//       metadata: metadataPDA,
-//       mint: mint,
-//       mintAuthority: walletKeypair.publicKey,
-//       payer: walletKeypair.publicKey,
-//       updateAuthority: walletKeypair.publicKey,
-//     },
-//     {
-//       createMetadataAccountArgsV3: {
-//         data: {
-//           name: name,
-//           symbol: symbol,
-//           uri: metadataUri ?? '',
-//           sellerFeeBasisPoints: 0,
-//           creators: null,
-//           collection: null,
-//           uses: null,
-//         },
-//         isMutable: true,
-//         collectionDetails: null,
-//       },
-//     },
-//   )
-
-//   const transaction = new Transaction().add(metadataInstruction)
-//   const signature = await connection.sendTransaction(
-//     transaction,
-//     [walletKeypair],
-//     {
-//       skipPreflight: false,
-//       preflightCommitment: 'confirmed',
-//     },
-//   )
-
-//   await connection.confirmTransaction(signature, 'confirmed')
-
-//   await registerToken()
-
-//   return mint.toBase58()
-// }
-
-export async function testandoDB() {
-  try {
-    return await prisma.token.create({
-      data: {
-        name: 'token_1',
-        amount: 60,
-        description: 'token description',
-        symble: 'TKN1',
-      },
-    })
-  } catch (error) {
-    return error
   }
 }
